@@ -35,9 +35,13 @@ public class PobedaHomePage {
     @FindBy(xpath = "//a[@href='/information#company']")
     WebElement aboutCompany;
 
-    private String url = "https://pobeda.aero";
+    public String url = "https://pobeda.aero";
 
     private SoftAssertions softly;
+
+    // Конструктор по умолчанию (без параметров)
+    public PobedaHomePage() {
+    }
 
     // Конструктор с инициализацией PageFactory
     public PobedaHomePage(WebDriver driver, SoftAssertions sofly) {

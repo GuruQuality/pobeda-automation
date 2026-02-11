@@ -14,13 +14,7 @@ public class PobedaHomePage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    @FindBy(xpath = "//title")
-    WebElement pageTitle;
-
-    @FindBy(xpath = "//*[contains(@class,'dp-1a6miki-root-root-root')]/*[1]")
-    WebElement logo;
-
-    @FindBy(xpath = "//*[contains(@class,'dp-1x07rlv-lottie')]/*[1]")
+    @FindBy(css = "[aria-label='«Авиакомпания «Победа», Группа «Аэрофлот»']")
     WebElement logo2;
 
     @FindBy(xpath = "//a[@href='/information']")
@@ -38,6 +32,11 @@ public class PobedaHomePage {
     public String url = "https://pobeda.aero";
 
     private SoftAssertions softly;
+
+    //Константы Заголовков
+    private static final String EXPECTED_FLIGHT_PREP = "Подготовка к полёту";
+    private static final String EXPECTED_USEFUL_INFO = "Полезная информация";
+    private static final String EXPECTED_ABOUT_COMPANY = "О компании";
 
     // Конструктор по умолчанию (без параметров)
     public PobedaHomePage() {
@@ -72,11 +71,6 @@ public class PobedaHomePage {
 
     // Проверка отображения логотипа
     public void isLogoDisplayed() {
-        // 4. Получить внутренний HTML
-//        String innerHtml = logo2.getAttribute("innerHTML");
-//        String outerHtml = logo2.getAttribute("outerHTML");
-//        System.out.println("Внутренний HTML: " + innerHtml);
-//        System.out.println("Наружний HTML: " + outerHtml);
         try {
             wait.until(ExpectedConditions.visibilityOf(logo2));
             softly.assertThat(logo2.isDisplayed())
@@ -108,14 +102,14 @@ public class PobedaHomePage {
 
     //Проверка заголовков в Popup "Информация"
     public void verifyPopupHeaders() {
-        softly.assertThat(flightPreparation.isDisplayed())
-                .as("Заголовок 'Подготовка к полету' не отображается")
-                .isTrue();
-        softly.assertThat(usefulInfo.isDisplayed())
-                .as("Заголовок 'Полезная информация' не отображается")
-                .isTrue();
-        softly.assertThat(aboutCompany.isDisplayed())
-                .as("Заголовок 'О компании' не отображается")
-                .isTrue();
+        softly.assertThat(flightPreparation.getText())
+                .as("Проверка заголовка '%s'", EXPECTED_FLIGHT_PREP)
+                .isEqualTo(EXPECTED_FLIGHT_PREP);
+        softly.assertThat(usefulInfo.getText())
+                .as("Проверка заголовка '%s'", EXPECTED_USEFUL_INFO)
+                .isEqualTo(EXPECTED_USEFUL_INFO);
+        softly.assertThat(aboutCompany.getText())
+                .as("Проверка заголовка '%s'", EXPECTED_ABOUT_COMPANY)
+                .isEqualTo(EXPECTED_ABOUT_COMPANY);
     }
 }

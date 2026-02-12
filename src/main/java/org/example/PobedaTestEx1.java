@@ -27,11 +27,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 4. Убедиться, что появилось всплывающее окно, которое содержит следующие заголовки: «Подготовка к полету», «Полезная информация», «О компании».
  */
 
-public class Pobeda_testEx1 {
+public class PobedaTestEx1 {
     WebDriver driver;
     SoftAssertions softly = new SoftAssertions();
-
-
     @Before
     public void openDriver() {
         // 1. Настраиваем драйвер автоматически

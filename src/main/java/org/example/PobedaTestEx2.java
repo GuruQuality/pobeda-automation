@@ -22,11 +22,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 6. Убедиться, что около поля «Туда» появилась красная обводка.
  */
 
-public class Pobeda_testEx2 {
+public class PobedaTestEx2 {
     WebDriver driver;
     SoftAssertions softly = new SoftAssertions();
-
-
     @Before
     public void openDriver() {
         // 1. Настраиваем драйвер автоматически

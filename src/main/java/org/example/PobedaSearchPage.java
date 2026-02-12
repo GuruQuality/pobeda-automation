@@ -23,7 +23,6 @@ public class PobedaSearchPage extends PobedaHomePage {
     @FindBy(xpath = "(//*[@placeholder='Туда'])[1]")
     WebElement departureDate;
 
-
     @FindBy(xpath = "(//*[@placeholder='Обратно'])[1]")
     WebElement arrivalDate;
 

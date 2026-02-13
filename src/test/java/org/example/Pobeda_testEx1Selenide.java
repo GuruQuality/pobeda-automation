@@ -1,14 +1,18 @@
 package org.example;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+//import io.github.bonigarcia.wdm.WebDriverManager;
+
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.BeforeClass;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 /*
 Общее описание к задачам
 Написать три автотеста, связанных с функционалом сайта «pobeda.aero». При разработке автотестов необходимо использовать паттерны Page Object Model и Page Factory, а также расставить явные и неявные ожидания там, где они нужны.
@@ -26,37 +30,23 @@ import org.openqa.selenium.chrome.ChromeOptions;
 3. Навести мышку на пункт «Информация».
 4. Убедиться, что появилось всплывающее окно, которое содержит следующие заголовки: «Подготовка к полету», «Полезная информация», «О компании».
  */
-
-public class Pobeda_testEx1 {
-    WebDriver driver;
+public class Pobeda_testEx1Selenide {
     SoftAssertions softly = new SoftAssertions();
-
 
     @Before
     public void openDriver() {
-        // 1. Настраиваем драйвер автоматически
-        WebDriverManager.chromedriver().setup();
-
-        // 2. Создаем опции
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized");
-        options.addArguments("--disable-notifications");
-        options.addArguments("--remote-allow-origins=*");
-
-        // 3. Создаем драйвер
-        driver = new ChromeDriver();
-        //driver.get("https://www.pobeda.aero/");
-        driver.manage().timeouts().getPageLoadTimeout();//Дождаться прогрузки страницы
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
+        System.setProperty("org.openqa.selenium.level", "OFF");
+        System.setProperty("webdriver.chrome.silentOutput", "true");
     }
 
     @Test
     public void testTitlePage() throws InterruptedException {
-        //SoftAssertions softly = new SoftAssertions();
+        //Configuration.pageLoadStrategy = "none";
         // 1. Перейти на сайт
-        PobedaHomePage pobedaPage = new PobedaHomePage(driver, softly);
-        pobedaPage.open();
+        PobedaHomePageSelenide pobedaPage = open("https://pobeda.aero", PobedaHomePageSelenide.class);
+        pobedaPage.setSoftly(softly);
         pobedaPage.verifyURL();//Проверка, что нужный нам сайт открылся
-
         pobedaPage.verifyTitle("Авиакомпания «Победа» - купить билеты на самолёт дешево онлайн, прямые и трансферные рейсы");
         pobedaPage.isLogoDisplayed();
     }
@@ -64,15 +54,14 @@ public class Pobeda_testEx1 {
     @Test
     public void testInformationPopup() {
         // 1. Перейти на сайт
-        PobedaHomePage pobedaPage = new PobedaHomePage(driver, softly);
-        pobedaPage.open();
+        PobedaHomePageSelenide pobedaPage = open("https://pobeda.aero", PobedaHomePageSelenide.class);
+        pobedaPage.setSoftly(softly);
         pobedaPage.moveToInformationMenu();// Навести мышку на пункт «Информация»
         pobedaPage.verifyPopupHeaders();//появилось всплывающее окно с заголовками
     }
 
     @After
     public void closeDriverAndGetSoftlyAssert() {
-        driver.quit();
         // ВСЕ проверки будут выполнены, даже если первые упали
         softly.assertAll(); // Здесь бросится исключение со ВСЕМИ ошибками
     }

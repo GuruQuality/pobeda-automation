@@ -1,13 +1,12 @@
 package org.example;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+
+import static com.codeborne.selenide.Selenide.open;
+
 /*
 Задание №2. Page Object. Инициирование поиска
 1. Перейти на сайт pobeda.aero.
@@ -21,37 +20,22 @@ import org.openqa.selenium.chrome.ChromeOptions;
 5. Нажать кнопку «Поиск».
 6. Убедиться, что около поля «Туда» появилась красная обводка.
  */
-
-public class Pobeda_testEx2 {
-    WebDriver driver;
+public class Pobeda_testEx2Selenide {
     SoftAssertions softly = new SoftAssertions();
-
 
     @Before
     public void openDriver() {
-        // 1. Настраиваем драйвер автоматически
-        WebDriverManager.chromedriver().setup();
-
-        // 2. Создаем опции
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized");
-        options.addArguments("--disable-notifications");
-        options.addArguments("--remote-allow-origins=*");
-
-        // 3. Создаем драйвер
-        driver = new ChromeDriver();
-        //driver.get("https://www.pobeda.aero/");
-        driver.manage().timeouts().getPageLoadTimeout();//Дождаться прогрузки страницы
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
+        System.setProperty("org.openqa.selenium.level", "OFF");
+        System.setProperty("webdriver.chrome.silentOutput", "true");
     }
 
     @Test
     public void testTitlePage() throws InterruptedException {
-        //SoftAssertions softly = new SoftAssertions();
         // 1. Перейти на сайт
-        PobedaHomePage pobedaPage = new PobedaHomePage(driver, softly);
-        pobedaPage.open();
+        PobedaHomePageSelenide pobedaPage = open("https://pobeda.aero", PobedaHomePageSelenide.class);
+        pobedaPage.setSoftly(softly);
         pobedaPage.verifyURL();//Проверка, что нужный нам сайт открылся
-
         pobedaPage.verifyTitle("Авиакомпания «Победа» - купить билеты на самолёт дешево онлайн, прямые и трансферные рейсы");
         pobedaPage.isLogoDisplayed();
     }
@@ -59,19 +43,18 @@ public class Pobeda_testEx2 {
     @Test
     public void testISearchBlock() throws InterruptedException {
         // 1. Перейти на сайт
-        PobedaSearchPage pobedaPage = new PobedaSearchPage(driver, softly);
-        pobedaPage.open();
-        pobedaPage.verifySearchBlock();//появилось всплывающее окно с заголовками
-        pobedaPage.enterToCity("Москва","Санкт-Петербург");//добавление городов в блок Поиска
-        pobedaPage.closePromoPopup();
-        pobedaPage.clickSearch();
-        pobedaPage.hasRedBorderOnDepartureDate();
-        Thread.sleep(30000);
+        PobedaSearchPageSelenide pobedaSearchPage = open("https://pobeda.aero", PobedaSearchPageSelenide.class);
+        pobedaSearchPage.setSoftly(softly);
+        pobedaSearchPage.verifySearchBlock();//появилось всплывающее окно с заголовками
+        pobedaSearchPage.enterToCity("Москва", "Санкт-Петербург");//добавление городов в блок Поиска
+        pobedaSearchPage.closePromoPopup();
+        pobedaSearchPage.clickSearch();
+        pobedaSearchPage.hasRedBorderOnDepartureDate();
+        //Thread.sleep(30000);
     }
 
     @After
     public void closeDriverAndGetSoftlyAssert() {
-        driver.quit();
         // ВСЕ проверки будут выполнены, даже если первые упали
         softly.assertAll(); // Здесь бросится исключение со ВСЕМИ ошибками
     }

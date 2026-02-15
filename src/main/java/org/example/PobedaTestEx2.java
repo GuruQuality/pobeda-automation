@@ -2,9 +2,9 @@ package org.example;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -23,19 +23,17 @@ import org.openqa.selenium.chrome.ChromeOptions;
  */
 
 public class PobedaTestEx2 {
-    WebDriver driver;
-    SoftAssertions softly = new SoftAssertions();
-    @Before
-    public void openDriver() {
+    static WebDriver driver;
+    static SoftAssertions softly = new SoftAssertions();
+    @BeforeAll
+    public static void openDriver() {
         // 1. Настраиваем драйвер автоматически
         WebDriverManager.chromedriver().setup();
-
         // 2. Создаем опции
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
         options.addArguments("--disable-notifications");
         options.addArguments("--remote-allow-origins=*");
-
         // 3. Создаем драйвер
         driver = new ChromeDriver();
         //driver.get("https://www.pobeda.aero/");
@@ -44,12 +42,10 @@ public class PobedaTestEx2 {
 
     @Test
     public void testTitlePage() throws InterruptedException {
-        //SoftAssertions softly = new SoftAssertions();
         // 1. Перейти на сайт
         PobedaHomePage pobedaPage = new PobedaHomePage(driver, softly);
         pobedaPage.open();
         pobedaPage.verifyURL();//Проверка, что нужный нам сайт открылся
-
         pobedaPage.verifyTitle("Авиакомпания «Победа» - купить билеты на самолёт дешево онлайн, прямые и трансферные рейсы");
         pobedaPage.isLogoDisplayed();
     }
@@ -64,11 +60,10 @@ public class PobedaTestEx2 {
         pobedaPage.closePromoPopup();
         pobedaPage.clickSearch();
         pobedaPage.hasRedBorderOnDepartureDate();
-        Thread.sleep(30000);
     }
 
-    @After
-    public void closeDriverAndGetSoftlyAssert() {
+    @AfterAll
+    public static void closeDriverAndGetSoftlyAssert() {
         driver.quit();
         // ВСЕ проверки будут выполнены, даже если первые упали
         softly.assertAll(); // Здесь бросится исключение со ВСЕМИ ошибками

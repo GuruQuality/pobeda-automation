@@ -2,9 +2,9 @@ package org.example;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -26,12 +26,12 @@ import org.openqa.selenium.chrome.ChromeOptions;
 3. Навести мышку на пункт «Информация».
 4. Убедиться, что появилось всплывающее окно, которое содержит следующие заголовки: «Подготовка к полету», «Полезная информация», «О компании».
  */
-
 public class PobedaTestEx1 {
-    WebDriver driver;
-    SoftAssertions softly = new SoftAssertions();
-    @Before
-    public void openDriver() {
+    static WebDriver driver;
+    static SoftAssertions softly = new SoftAssertions();
+
+    @BeforeAll
+    public static void openDriver() {
         // 1. Настраиваем драйвер автоматически
         WebDriverManager.chromedriver().setup();
 
@@ -49,12 +49,10 @@ public class PobedaTestEx1 {
 
     @Test
     public void testTitlePage() throws InterruptedException {
-        //SoftAssertions softly = new SoftAssertions();
         // 1. Перейти на сайт
         PobedaHomePage pobedaPage = new PobedaHomePage(driver, softly);
         pobedaPage.open();
         pobedaPage.verifyURL();//Проверка, что нужный нам сайт открылся
-
         pobedaPage.verifyTitle("Авиакомпания «Победа» - купить билеты на самолёт дешево онлайн, прямые и трансферные рейсы");
         pobedaPage.isLogoDisplayed();
     }
@@ -68,8 +66,8 @@ public class PobedaTestEx1 {
         pobedaPage.verifyPopupHeaders();//появилось всплывающее окно с заголовками
     }
 
-    @After
-    public void closeDriverAndGetSoftlyAssert() {
+    @AfterAll
+    public static void closeDriverAndGetSoftlyAssert() {
         driver.quit();
         // ВСЕ проверки будут выполнены, даже если первые упали
         softly.assertAll(); // Здесь бросится исключение со ВСЕМИ ошибками

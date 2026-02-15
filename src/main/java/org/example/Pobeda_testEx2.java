@@ -2,9 +2,10 @@ package org.example;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -21,13 +22,12 @@ import org.openqa.selenium.chrome.ChromeOptions;
 5. Нажать кнопку «Поиск».
 6. Убедиться, что около поля «Туда» появилась красная обводка.
  */
-
 public class Pobeda_testEx2 {
-    WebDriver driver;
-    SoftAssertions softly = new SoftAssertions();
+    static WebDriver driver;
+    static SoftAssertions softly = new SoftAssertions();
 
 
-    @Before
+    @BeforeEach
     public void openDriver() {
         // 1. Настраиваем драйвер автоматически
         WebDriverManager.chromedriver().setup();
@@ -66,11 +66,10 @@ public class Pobeda_testEx2 {
         pobedaPage.closePromoPopup();
         pobedaPage.clickSearch();
         pobedaPage.hasRedBorderOnDepartureDate();
-        Thread.sleep(30000);
     }
 
-    @After
-    public void closeDriverAndGetSoftlyAssert() {
+    @AfterAll
+    public static void closeDriverAndGetSoftlyAssert() {
         driver.quit();
         // ВСЕ проверки будут выполнены, даже если первые упали
         softly.assertAll(); // Здесь бросится исключение со ВСЕМИ ошибками

@@ -14,7 +14,7 @@ public class PobedaHomePage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    @FindBy(css = "[aria-label='«Авиакомпания «Победа», Группа «Аэрофлот»']")
+    @FindBy(xpath = "//canvas")
     WebElement logo2;
 
     @FindBy(xpath = "//a[@href='/information']")
@@ -84,7 +84,6 @@ public class PobedaHomePage {
         }
     }
 
-
     // Проверка URL
     public void verifyURL() {
         String actualUrl = driver.getCurrentUrl();
@@ -102,6 +101,7 @@ public class PobedaHomePage {
 
     //Проверка заголовков в Popup "Информация"
     public void verifyPopupHeaders() {
+        wait.until(ExpectedConditions.visibilityOf(flightPreparation));
         softly.assertThat(flightPreparation.getText())
                 .as("Проверка заголовка '%s'", EXPECTED_FLIGHT_PREP)
                 .isEqualTo(EXPECTED_FLIGHT_PREP);

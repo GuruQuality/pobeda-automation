@@ -2,13 +2,14 @@ package org.example;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.time.Duration;
 /*
 Общее описание к задачам
 Написать три автотеста, связанных с функционалом сайта «pobeda.aero». При разработке автотестов необходимо использовать паттерны Page Object Model и Page Factory, а также расставить явные и неявные ожидания там, где они нужны.
@@ -26,14 +27,12 @@ import org.openqa.selenium.chrome.ChromeOptions;
 3. Навести мышку на пункт «Информация».
 4. Убедиться, что появилось всплывающее окно, которое содержит следующие заголовки: «Подготовка к полету», «Полезная информация», «О компании».
  */
-
 public class Pobeda_testEx1 {
-    WebDriver driver;
-    SoftAssertions softly = new SoftAssertions();
+    static WebDriver driver;
+    static SoftAssertions softly = new SoftAssertions();
 
-
-    @Before
-    public void openDriver() {
+    @BeforeAll
+    public static void openDriver() {
         // 1. Настраиваем драйвер автоматически
         WebDriverManager.chromedriver().setup();
 
@@ -46,12 +45,11 @@ public class Pobeda_testEx1 {
         // 3. Создаем драйвер
         driver = new ChromeDriver();
         //driver.get("https://www.pobeda.aero/");
-        driver.manage().timeouts().getPageLoadTimeout();//Дождаться прогрузки страницы
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));//Дождаться прогрузки страницы
     }
 
     @Test
     public void testTitlePage() throws InterruptedException {
-        //SoftAssertions softly = new SoftAssertions();
         // 1. Перейти на сайт
         PobedaHomePage pobedaPage = new PobedaHomePage(driver, softly);
         pobedaPage.open();
@@ -70,8 +68,8 @@ public class Pobeda_testEx1 {
         pobedaPage.verifyPopupHeaders();//появилось всплывающее окно с заголовками
     }
 
-    @After
-    public void closeDriverAndGetSoftlyAssert() {
+    @AfterAll
+    public static void closeDriverAndGetSoftlyAssert() {
         driver.quit();
         // ВСЕ проверки будут выполнены, даже если первые упали
         softly.assertAll(); // Здесь бросится исключение со ВСЕМИ ошибками

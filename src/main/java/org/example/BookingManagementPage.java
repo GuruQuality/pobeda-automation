@@ -72,8 +72,8 @@ public class BookingManagementPage extends PobedaHomePage {
     }
 
     public void scrollAndClickBookingManagement() throws InterruptedException {
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));//Дождаться прогрузки страницы
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", bookingManagement);
-        Thread.sleep(1000);
         bookingManagement.click();
     }
 

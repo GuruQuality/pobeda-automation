@@ -2,14 +2,10 @@ package org.example;
 
 //import io.github.bonigarcia.wdm.WebDriverManager;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideConfig;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.BeforeClass;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
@@ -30,11 +26,11 @@ import static com.codeborne.selenide.Selenide.open;
 3. Навести мышку на пункт «Информация».
 4. Убедиться, что появилось всплывающее окно, которое содержит следующие заголовки: «Подготовка к полету», «Полезная информация», «О компании».
  */
-public class Pobeda_testEx1Selenide {
-    SoftAssertions softly = new SoftAssertions();
+public class PobedaTestEx1Selenide {
+    static SoftAssertions softly = new SoftAssertions();
 
-    @Before
-    public void openDriver() {
+    @BeforeAll
+    public static void openDriver() {
         System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
         System.setProperty("org.openqa.selenium.level", "OFF");
         System.setProperty("webdriver.chrome.silentOutput", "true");
@@ -47,7 +43,7 @@ public class Pobeda_testEx1Selenide {
         PobedaHomePageSelenide pobedaPage = open("https://pobeda.aero", PobedaHomePageSelenide.class);
         pobedaPage.setSoftly(softly);
         pobedaPage.verifyURL();//Проверка, что нужный нам сайт открылся
-        pobedaPage.verifyTitle("Авиакомпания «Победа» - купить билеты на самолёт дешево онлайн, прямые и трансферные рейсы");
+        pobedaPage.verifyTitle("Авиакомпания «Победа» - купить авиабилеты онлайн, дешёвые билеты на самолёт, прямые и трансферные рейсы с пересадками");
         pobedaPage.isLogoDisplayed();
     }
 
@@ -60,8 +56,8 @@ public class Pobeda_testEx1Selenide {
         pobedaPage.verifyPopupHeaders();//появилось всплывающее окно с заголовками
     }
 
-    @After
-    public void closeDriverAndGetSoftlyAssert() {
+    @AfterAll
+    public static void closeDriverAndGetSoftlyAssert() {
         // ВСЕ проверки будут выполнены, даже если первые упали
         softly.assertAll(); // Здесь бросится исключение со ВСЕМИ ошибками
     }

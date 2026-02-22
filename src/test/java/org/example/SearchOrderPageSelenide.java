@@ -50,7 +50,7 @@ public class SearchOrderPageSelenide extends PobedaHomePageSelenide {
 
     public void errorMessageIsChecked(String expectedError) {
         this.softAssert(() ->
-                actualErrorMessage.shouldBe(Condition.visible,Duration.ofSeconds(10)).shouldBe(Condition.exactText(expectedError))
+                actualErrorMessage.shouldBe(Condition.visible, Duration.ofSeconds(10)).shouldBe(Condition.exactText(expectedError))
         );
     }
 }

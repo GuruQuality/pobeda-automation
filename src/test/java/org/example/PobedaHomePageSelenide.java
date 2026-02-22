@@ -32,7 +32,7 @@ public class PobedaHomePageSelenide extends AbstractPageSelenide{
     @FindBy(xpath = "//a[@href='/information#company']")
     SelenideElement aboutCompany;
 
-    public String url = "https://pobeda.aero";
+    public String url = "https://www.flypobeda.ru/";
 
     //Константы Заголовков
     private static final String EXPECTED_FLIGHT_PREP = "Подготовка к полёту";

@@ -23,19 +23,19 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 public class BookingManagementPageSelenide extends PobedaHomePageSelenide {
 
-    @FindBy(className = "dp-ya8faq-root-root")
+    @FindBy(css = "[data-testid='ads-popup-close-icon']")
     private SelenideElement noThanksButtonPopup;
 
-    @FindBy(xpath = "(//*[contains(@class,'dp-rr18i4-root-root')])[2]")
+    @FindBy(xpath = "//a[contains(@class, 'root-root') and contains(text(), 'Управление бронированием')]")
     private SelenideElement bookingManagement;
 
-    @FindBy(xpath = "(//*[contains(@class,'dp-zu3w2f-root-control')])[1]")
+    @FindBy(css = "input[placeholder='Фамилия клиента']")
     SelenideElement lastNameField;
 
-    @FindBy(xpath = "(//*[contains(@class,'dp-zu3w2f-root-control')])[2]")
+    @FindBy(css = "input[placeholder='Номер бронирования или билета']")
     SelenideElement orderNumber;
 
-    @FindBy(xpath = "//button[@class='dp-tsteac-root-root-submitBtn']")
+    @FindBy(xpath = "//button[contains(@class,'root-root-submitBtn')]")
     SelenideElement buttonSearchBM;
 
     @FindBy(css = "label[for='searchOrderAgreeChb']")
@@ -46,15 +46,14 @@ public class BookingManagementPageSelenide extends PobedaHomePageSelenide {
 
     private String url = "https://pobeda.aero";
 
-    WebElement elementTest2;
     private String urlBookingManagement = "https://www.flypobeda.ru/services/booking-management";
 
     private String originalWindow;
 
     //Константы Заголовков в Блоке Информация
-    private static final String EXPECTED_ORDER_NUMBER = "Номер заказа или билета";
+    private static final String EXPECTED_ORDER_NUMBER = "Номер бронирования или билета";
     private static final String EXPECTED_LAST_NAME_FIELD = "Фамилия клиента";
-    private static final String EXPECTED_BUTTON_SEARCH_BM = "Поиск";
+    private static final String EXPECTED_BUTTON_SEARCH_BM = "ПОИСК";
 
     // Конструктор с инициализацией PageFactory
     public BookingManagementPageSelenide() {
@@ -65,8 +64,8 @@ public class BookingManagementPageSelenide extends PobedaHomePageSelenide {
         WebDriverRunner.getWebDriver().navigate().refresh();
     }
 
-
     public void closePromoPopup() {
+        noThanksButtonPopup.shouldBe(Condition.visible, Duration.ofSeconds(10));
         if (noThanksButtonPopup.isDisplayed()) {
             noThanksButtonPopup.click();
         }
@@ -90,7 +89,7 @@ public class BookingManagementPageSelenide extends PobedaHomePageSelenide {
         this.softAssert(() ->
                 orderNumber
                         .shouldBe(Condition.visible, Duration.ofSeconds(10))
-                        .shouldHave(attribute("placeholder",EXPECTED_ORDER_NUMBER))
+                        .shouldHave(attribute("placeholder", EXPECTED_ORDER_NUMBER))
         );
         this.softAssert(() ->
                 lastNameField
@@ -99,8 +98,8 @@ public class BookingManagementPageSelenide extends PobedaHomePageSelenide {
         );
         this.softAssert(() ->
                 buttonSearchBM
-                        .shouldBe(Condition.visible, Duration.ofSeconds(10))
-                        .shouldHave(attribute("placeholder", EXPECTED_BUTTON_SEARCH_BM))
+                        .shouldBe(exist, Duration.ofSeconds(10))
+                        .shouldHave(text(EXPECTED_BUTTON_SEARCH_BM))
         );
     }
 
@@ -132,6 +131,5 @@ public class BookingManagementPageSelenide extends PobedaHomePageSelenide {
         } catch (Exception e) {
             System.out.println("Появилась Катча");
         }
-
     }
 }

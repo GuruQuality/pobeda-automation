@@ -1,10 +1,9 @@
 package org.example;
 
 import org.assertj.core.api.SoftAssertions;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.WebDriver;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.open;
 
@@ -24,11 +23,11 @@ import static com.codeborne.selenide.Selenide.open;
 и нажать кнопку «Поиск».
 6. Убедиться, что в новой вкладке на экране отображается текст ошибки «Заказ с указанными параметрами не найден».
  */
-public class Pobeda_testEx3Selenide {
-    SoftAssertions softly = new SoftAssertions();
+public class PobedaTestEx3Selenide {
+    static SoftAssertions softly = new SoftAssertions();
 
-    @Before
-    public void openDriver() {
+    @BeforeAll
+    public static void openDriver() {
         System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
         System.setProperty("org.openqa.selenium.level", "OFF");
         System.setProperty("webdriver.chrome.silentOutput", "true");
@@ -40,7 +39,7 @@ public class Pobeda_testEx3Selenide {
         PobedaHomePageSelenide pobedaPage = open("https://pobeda.aero", PobedaHomePageSelenide.class);
         pobedaPage.setSoftly(softly);
         pobedaPage.verifyURL();//Проверка, что нужный нам сайт открылся
-        pobedaPage.verifyTitle("Авиакомпания «Победа» - купить билеты на самолёт дешево онлайн, прямые и трансферные рейсы");
+        pobedaPage.verifyTitle("Авиакомпания «Победа» - купить авиабилеты онлайн, дешёвые билеты на самолёт, прямые и трансферные рейсы с пересадками");
         pobedaPage.isLogoDisplayed();
     }
 
@@ -50,18 +49,17 @@ public class Pobeda_testEx3Selenide {
         BookingManagementPageSelenide pobedaPage = open("https://pobeda.aero", BookingManagementPageSelenide.class);
         pobedaPage.setSoftly(softly);
         // 1. Перейти на сайт
+        pobedaPage.closePromoPopup();
         pobedaPage.scrollAndClickBookingManagement();// Скролл и клик на пункт «Управление бронированием»
-        //Thread.sleep(1000);
-        pobedaPage.verifyURL();
+        //pobedaPage.verifyURL();
         pobedaPage.BookingManagementIsDisplayed();// Проверка, что открылась нужная страница
         pobedaPage.fillSearchFormAndSubmit();// Заполнение формы и ее отправление
         pobedaPage.errorMessageDisplayed("Заказ с указанными параметрами не найден");// Проверка отображения ошибки
-        Thread.sleep(1000);
         softly = pobedaPage.getSoftlyResult();
     }
 
-    @After
-    public void closeDriverAndGetSoftlyAssert() {
+    @AfterAll
+    public static void closeDriverAndGetSoftlyAssert() {
         // ВСЕ проверки будут выполнены, даже если первые упали
         softly.assertAll(); // Здесь бросится исключение со ВСЕМИ ошибками
     }

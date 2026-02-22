@@ -21,7 +21,7 @@ public class PobedaSearchPageSelenide extends PobedaHomePageSelenide {
     @FindBy(xpath = "(//*[@placeholder='Обратно'])[1]")
     SelenideElement arrivalDate;
 
-    @FindBy(xpath = "//button[contains(@class,'dp-14pgyec-root-root-root')]")
+    @FindBy(xpath = "//button[contains(@class,'dp-1ye1u0p-root-root-root')]")
     SelenideElement searchButton;
 
     @FindBy(xpath = "(//*[contains(@class,'dp-1dr6zbu-root')])[7]")
@@ -29,8 +29,6 @@ public class PobedaSearchPageSelenide extends PobedaHomePageSelenide {
 
     @FindBy(className = "dp-ya8faq-root-root")
     private SelenideElement noThanksButtonPopup;
-
-    //private String url = "https://pobeda.aero";
 
     private SoftAssertions softly;
 

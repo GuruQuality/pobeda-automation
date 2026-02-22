@@ -1,9 +1,9 @@
 package org.example;
 
 import org.assertj.core.api.SoftAssertions;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.open;
 
@@ -20,11 +20,11 @@ import static com.codeborne.selenide.Selenide.open;
 5. Нажать кнопку «Поиск».
 6. Убедиться, что около поля «Туда» появилась красная обводка.
  */
-public class Pobeda_testEx2Selenide {
-    SoftAssertions softly = new SoftAssertions();
+public class PobedaTestEx2Selenide {
+    static SoftAssertions softly = new SoftAssertions();
 
-    @Before
-    public void openDriver() {
+    @BeforeAll
+    public static void openDriver() {
         System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
         System.setProperty("org.openqa.selenium.level", "OFF");
         System.setProperty("webdriver.chrome.silentOutput", "true");
@@ -36,7 +36,7 @@ public class Pobeda_testEx2Selenide {
         PobedaHomePageSelenide pobedaPage = open("https://pobeda.aero", PobedaHomePageSelenide.class);
         pobedaPage.setSoftly(softly);
         pobedaPage.verifyURL();//Проверка, что нужный нам сайт открылся
-        pobedaPage.verifyTitle("Авиакомпания «Победа» - купить билеты на самолёт дешево онлайн, прямые и трансферные рейсы");
+        pobedaPage.verifyTitle("Авиакомпания «Победа» - купить авиабилеты онлайн, дешёвые билеты на самолёт, прямые и трансферные рейсы с пересадками");
         pobedaPage.isLogoDisplayed();
     }
 
@@ -53,8 +53,8 @@ public class Pobeda_testEx2Selenide {
         //Thread.sleep(30000);
     }
 
-    @After
-    public void closeDriverAndGetSoftlyAssert() {
+    @AfterAll
+    public static void closeDriverAndGetSoftlyAssert() {
         // ВСЕ проверки будут выполнены, даже если первые упали
         softly.assertAll(); // Здесь бросится исключение со ВСЕМИ ошибками
     }

@@ -5,7 +5,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -35,16 +35,13 @@ public class Pobeda_testEx1 {
     public static void openDriver() {
         // 1. Настраиваем драйвер автоматически
         WebDriverManager.chromedriver().setup();
-
         // 2. Создаем опции
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
         options.addArguments("--disable-notifications");
         options.addArguments("--remote-allow-origins=*");
-
         // 3. Создаем драйвер
         driver = new ChromeDriver();
-        //driver.get("https://www.pobeda.aero/");
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));//Дождаться прогрузки страницы
     }
 
@@ -54,8 +51,7 @@ public class Pobeda_testEx1 {
         PobedaHomePage pobedaPage = new PobedaHomePage(driver, softly);
         pobedaPage.open();
         pobedaPage.verifyURL();//Проверка, что нужный нам сайт открылся
-
-        pobedaPage.verifyTitle("Авиакомпания «Победа» - купить билеты на самолёт дешево онлайн, прямые и трансферные рейсы");
+        pobedaPage.verifyTitle("Авиакомпания «Победа» - купить авиабилеты онлайн, дешёвые билеты на самолёт, прямые и трансферные рейсы с пересадками");
         pobedaPage.isLogoDisplayed();
     }
 

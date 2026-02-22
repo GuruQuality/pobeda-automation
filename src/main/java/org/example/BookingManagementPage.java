@@ -13,31 +13,21 @@ public class BookingManagementPage extends PobedaHomePage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    @FindBy(className = "dp-ya8faq-root-root")
+    @FindBy(css = "[data-testid='ads-popup-close-icon']")
     private WebElement noThanksButtonPopup;
 
-    @FindBy(xpath = "(//*[contains(@class,'dp-rr18i4-root-root')])[2]")
+    @FindBy(xpath = "//a[contains(@class, 'root-root') and contains(text(), 'Управление бронированием')]")
     private WebElement bookingManagement;
 
-    @FindBy(xpath = "(//*[contains(@class,'dp-zu3w2f-root-control')])[1]")
+    @FindBy(css = "input[placeholder='Фамилия клиента']")
     WebElement lastNameField;
 
-    @FindBy(xpath = "(//*[contains(@class,'dp-zu3w2f-root-control')])[2]")
+    @FindBy(css = "input[placeholder='Номер бронирования или билета']")
     WebElement orderNumber;
 
-    @FindBy(xpath = "//button[@class='dp-tsteac-root-root-submitBtn']")
+    @FindBy(xpath = "//button[contains(@class,'root-root-submitBtn')]")
     WebElement buttonSearchBM;
 
-    @FindBy(css = "label[for='searchOrderAgreeChb']")
-    WebElement privacyPolicyCheckbox;
-
-    @FindBy(xpath = "//button[@class='btn btn_search btn_search--order btn_formSearch btn_formSearch_js']")
-    WebElement buttonFindOrder;
-
-    WebElement elementTest;
-    private String url = "https://pobeda.aero";
-
-    WebElement elementTest2;
     private String urlBookingManagement = "https://www.flypobeda.ru/services/booking-management";
 
     private SoftAssertions softly;
@@ -58,7 +48,6 @@ public class BookingManagementPage extends PobedaHomePage {
         PageFactory.initElements(driver, this);
     }
 
-    // Открыть сайт
     public void open() {
         driver.get(url);
     }
@@ -68,10 +57,11 @@ public class BookingManagementPage extends PobedaHomePage {
         try {
             noThanksButtonPopup.click();
         } catch (NoSuchElementException e) {
+            System.out.println("Промо-поп-ап не отображается: " + e.getMessage());
         }
     }
 
-    public void scrollAndClickBookingManagement() throws InterruptedException {
+    public void scrollAndClickBookingManagement() {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));//Дождаться прогрузки страницы
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", bookingManagement);
         bookingManagement.click();
@@ -89,20 +79,20 @@ public class BookingManagementPage extends PobedaHomePage {
     public void BookingManagementIsDisplayed() {
         //Проверка заголовков в Popup "Информация"
         wait.until(ExpectedConditions.visibilityOf(orderNumber));
-        softly.assertThat(orderNumber.isDisplayed())
+        String actualPlaceholderOrderNumberText = orderNumber.getAttribute("placeholder");
+        softly.assertThat(actualPlaceholderOrderNumberText)
                 .as("Поле 'Номер заказа или билета' не отображается")
-                .isTrue();
-
+                .isEqualTo("Номер бронирования или билета");
         wait.until(ExpectedConditions.visibilityOf(lastNameField));
-        softly.assertThat(lastNameField.isDisplayed())
+        String actualPlaceholderLastNameField = lastNameField.getAttribute("placeholder");
+        softly.assertThat(actualPlaceholderLastNameField)
                 .as("Поле 'Фамилия клиента' не отображается")
-                .isTrue();
-
+                .isEqualTo("Фамилия клиента");
         wait.until(ExpectedConditions.visibilityOf(buttonSearchBM));
-        softly.assertThat(buttonSearchBM.isDisplayed())
-                .as("Отсутствует кнопка Поиск")
-                .isTrue();
-
+        String actualPlaceholderButtonSearchBMText = buttonSearchBM.getText();
+        softly.assertThat(actualPlaceholderButtonSearchBMText)
+                .as("Кнопка 'ПОИСК' не отображается")
+                .isEqualTo("ПОИСК");
     }
 
     public void fillSearchFormAndSubmit() throws InterruptedException {
@@ -115,7 +105,7 @@ public class BookingManagementPage extends PobedaHomePage {
 
         // Сохраняем текущую вкладку
         originalWindow = driver.getWindowHandle();
-        Thread.sleep(5000);
+        wait.withTimeout(Duration.ofSeconds(5));
 
         // Ждем появления новой вкладки
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -138,6 +128,5 @@ public class BookingManagementPage extends PobedaHomePage {
        }catch (Exception e){
            System.out.println("Появилась Катча");
        }
-
     }
 }

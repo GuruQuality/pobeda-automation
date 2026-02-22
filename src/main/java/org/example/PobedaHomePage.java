@@ -29,7 +29,7 @@ public class PobedaHomePage {
     @FindBy(xpath = "//a[@href='/information#company']")
     WebElement aboutCompany;
 
-    public String url = "https://pobeda.aero";
+    public String url = "https://www.flypobeda.ru/";
 
     private SoftAssertions softly;
 
@@ -38,11 +38,9 @@ public class PobedaHomePage {
     private static final String EXPECTED_USEFUL_INFO = "Полезная информация";
     private static final String EXPECTED_ABOUT_COMPANY = "О компании";
 
-    // Конструктор по умолчанию (без параметров)
     public PobedaHomePage() {
     }
 
-    // Конструктор с инициализацией PageFactory
     public PobedaHomePage(WebDriver driver, SoftAssertions sofly) {
         this.driver = driver;
         this.softly = sofly;
@@ -51,7 +49,6 @@ public class PobedaHomePage {
         PageFactory.initElements(driver, this);
     }
 
-    // Открыть сайт
     public void open() {
         driver.get(url);
     }

@@ -2,15 +2,15 @@ package org.example;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.util.concurrent.TimeUnit;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /*
 Задание №3. Page Object. Результаты поиска
@@ -46,10 +46,8 @@ public class Pobeda_testEx3 {
                 .addArguments("--start-maximized")
                 .addArguments("--disable-notifications")//Отключает всплывающие попапы
                 .addArguments("--remote-allow-origins=*");//Разрешает удаленные подключения к драйверу
-
         // 3. Создаем драйвер
         driver = new ChromeDriver(options);
-        //driver.get("https://www.pobeda.aero/");
         driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
     }
 
@@ -59,7 +57,7 @@ public class Pobeda_testEx3 {
         PobedaHomePage pobedaPage = new PobedaHomePage(driver, softly);
         pobedaPage.open();
         pobedaPage.verifyURL();//Проверка, что нужный нам сайт открылся
-        pobedaPage.verifyTitle("Авиакомпания «Победа» - купить билеты на самолёт дешево онлайн, прямые и трансферные рейсы");
+        pobedaPage.verifyTitle("Авиакомпания «Победа» - купить авиабилеты онлайн, дешёвые билеты на самолёт, прямые и трансферные рейсы с пересадками");
         pobedaPage.isLogoDisplayed();
     }
 
